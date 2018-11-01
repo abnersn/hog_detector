@@ -1,6 +1,6 @@
 clear; clc; close all;
 
-I = rgb2gray(imread('big_sample.jpg'));
+I = rgb2gray(imread('sample.jpg'));
 
 BLOCK_SIZE = [32 32];
 PATCH_SIZE = 4;

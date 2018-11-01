@@ -1,21 +1,24 @@
 clear; clc;
 close all;
 
-IMAGES_SIZE = [32 32];
+SAMPLES_SIZE = [32 32];
 PATCH_SIZE = 4;
 BINS = 9;
+DATA_SIZE = (SAMPLES_SIZE(1) / PATCH_SIZE * SAMPLES_SIZE(2) / PATCH_SIZE) * BINS;
 NORM_KERNEL_SIZE = 2;
-NUM_TRAIN_IMAGES = 4200;
-NUM_IMAGES = 6000;
-DATA_SIZE = prod([ IMAGES_SIZE / PATCH_SIZE BINS]);
+
+%%% Quantidade de amostras positivas e negativas para utilizar no treino.
+IMAGES_POSITIVE = 6123;
+IMAGES_NEGATIVE = 8275;
+TRAIN_PERCENT = 70;
 
 %%% Carregamento das amostras
 fprintf('Lendo imagens\n');
 
-negative = zeros([IMAGES_SIZE NUM_IMAGES]);
-positive = zeros([IMAGES_SIZE NUM_IMAGES]);
+negative = zeros([SAMPLES_SIZE IMAGES_NEGATIVE]);
+positive = zeros([SAMPLES_SIZE IMAGES_POSITIVE]);
 
-for i = 1:NUM_IMAGES
+for i = 1:IMAGES_NEGATIVE
     neg_file = sprintf('dados/negative/negative_%d.jpg', i);
     I = imread(neg_file);
     I = imresize(I, [32, 32]);
@@ -24,7 +27,9 @@ for i = 1:NUM_IMAGES
     else
         negative(:, :, i) = I;
     end
-    
+end
+
+for i = 1:IMAGES_POSITIVE
     pos_file = sprintf('dados/positive/positive_%d.jpg', i);
     I = imread(pos_file);
     I = imresize(I, [32, 32]);
@@ -37,24 +42,28 @@ end
 
 %%% Sorteio das amostras
 fprintf('Sorteando amostras para treino\n');
-indexes = randperm(NUM_IMAGES);
-train_negative = negative(:, :, indexes(1:NUM_TRAIN_IMAGES));
-test_negative = negative(:, :, indexes(1:(NUM_IMAGES - NUM_TRAIN_IMAGES)));
+indexes = randperm(IMAGES_NEGATIVE);
+negative_trainset_size = floor(TRAIN_PERCENT * IMAGES_NEGATIVE / 100);
+train_negative = negative(:, :, indexes(1:negative_trainset_size));
+test_negative = negative(:, :, indexes((negative_trainset_size + 1):end));
 
-indexes = randperm(NUM_IMAGES);
-train_positive = positive(:, :, indexes(1:NUM_TRAIN_IMAGES));
-test_positive = positive(:, :, indexes(1:(NUM_IMAGES - NUM_TRAIN_IMAGES)));
+indexes = randperm(IMAGES_POSITIVE);
+positive_trainset_size = floor(TRAIN_PERCENT * IMAGES_POSITIVE / 100);
+train_positive = positive(:, :, indexes(1:positive_trainset_size));
+test_positive = positive(:, :, indexes((positive_trainset_size + 1):end));
 
-train_data_negative = zeros([DATA_SIZE, NUM_TRAIN_IMAGES]);
-train_data_positive = zeros([DATA_SIZE, NUM_TRAIN_IMAGES]);
+train_data_negative = zeros(DATA_SIZE, IMAGES_NEGATIVE);
+train_data_positive = zeros(DATA_SIZE, IMAGES_POSITIVE);
 
 %%% Descritores HOG
 fprintf('Calculando descritores\n');
-for i = 1:NUM_TRAIN_IMAGES
+for i = 1:negative_trainset_size
     I = train_negative(:, :, i);
     hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
     train_data_negative(:, i) = hist(:);
+end
 
+for i = 1:positive_trainset_size
     I = train_positive(:, :, i);
     hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
     train_data_positive(:, i) = hist(:);
@@ -62,7 +71,7 @@ end
 
 %%% Treino da SVM
 train_data = [train_data_negative'; train_data_positive'];
-class_data = [zeros([NUM_TRAIN_IMAGES, 1]); ones([NUM_TRAIN_IMAGES, 1])];
+class_data = [zeros(IMAGES_NEGATIVE, 1); ones(IMAGES_POSITIVE, 1)];
 
 fprintf('Treinando SVM\n');
 svm_model = fitcsvm(train_data, class_data);
@@ -70,12 +79,11 @@ svm_model = fitcsvm(train_data, class_data);
 save('svm_model.mat', 'svm_model');
 
 error = 0;
+count = 0;
 
 %%% Cálculo do erro
 fprintf('Calculando acurácia\n');
-for i=1:(NUM_IMAGES - NUM_TRAIN_IMAGES)
-    
-    % Amostras negativas
+for i=1:size(test_negative, 3)
     I = test_negative(:,:, i);
 
     hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
@@ -84,7 +92,10 @@ for i=1:(NUM_IMAGES - NUM_TRAIN_IMAGES)
     if label ~= 0
         error = error + 1;
     end
-    
+    count = count + 1;
+end
+
+for i=1:size(test_positive, 3)    
     % Amostras positivas
     I = test_positive(:,:, i);
 
@@ -94,7 +105,8 @@ for i=1:(NUM_IMAGES - NUM_TRAIN_IMAGES)
     if label ~= 1
         error = error + 1;
     end
+    count = count + 1;
 end
 
-error_percent = error / (2 * (NUM_IMAGES - NUM_TRAIN_IMAGES));
+error_percent = error / count;
 disp(1 - error_percent);
