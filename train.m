@@ -8,9 +8,9 @@ DATA_SIZE = (SAMPLES_SIZE(1) / PATCH_SIZE * SAMPLES_SIZE(2) / PATCH_SIZE) * BINS
 NORM_KERNEL_SIZE = 2;
 
 %%% Quantidade de amostras positivas e negativas para utilizar no treino.
-IMAGES_POSITIVE = 6123;
-IMAGES_NEGATIVE = 8275;
-TRAIN_PERCENT = 70;
+IMAGES_POSITIVE = 500;
+IMAGES_NEGATIVE = 25000;
+TRAIN_PERCENT = 80;
 
 %%% Carregamento das amostras
 fprintf('Lendo imagens\n');
@@ -19,7 +19,7 @@ negative = zeros([SAMPLES_SIZE IMAGES_NEGATIVE]);
 positive = zeros([SAMPLES_SIZE IMAGES_POSITIVE]);
 
 for i = 1:IMAGES_NEGATIVE
-    neg_file = sprintf('dados/negative/negative_%d.jpg', i);
+    neg_file = sprintf('dados/negative/image_%d.jpg', i);
     I = imread(neg_file);
     I = imresize(I, [32, 32]);
     if (size(I, 3) == 3)
