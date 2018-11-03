@@ -8,9 +8,9 @@ BINS = 8;
 NORM_KERNEL_SIZE = 2;
 DISPLAY = false;
 STEP = 2;
-TOLERANCE = 0.98;
+TOLERANCE = 0.5;
 
-I = rgb2gray(imread('samples/people.jpg'));
+I = rgb2gray(imread('samples/sample.jpg'));
 
 load('svm_model.mat', 'svm_model');
 [m,p,g] = gradient(I);
@@ -53,11 +53,11 @@ end
 % Supressão não-máxima
 [sorted_scores, indexes] = sort(scores, 'descend');
 detected_faces = detected_faces(indexes, :);
-supressed_indexes = zeros(1, size(detected_faces, 1));
-for i = 1:size(detected_faces, 1)
+supressed_indexes = zeros(1, length(detected_faces));
+for i = 1:length(detected_faces)
     if supressed_indexes(i) == 0
         face = detected_faces(i, :);
-        for j = 1: size(detected_faces, 1)
+        for j = 1: length(detected_faces)
             if i ~= j
                 intersection = rectint(detected_faces(j, :), face);
                 union = 2 * prod(BLOCK_SIZE) - intersection;
@@ -74,8 +74,8 @@ fprintf("\nConcluído\n");
 I = cat(3, I, I, I);
 for i = 1:length(supressed_indexes)
     if supressed_indexes(i) == 0
-        face = detected_faces(i, 1:2);
-        I = draw_rectangle(I, face, BLOCK_SIZE, [0, 0, 255]);
+        face = detected_faces(i);
+        I = draw_rectangle(I_disp, [i, j], BLOCK_SIZE, [0, 0, 255]);
     end
 end
 imshow(I);
