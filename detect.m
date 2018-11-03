@@ -1,13 +1,15 @@
 clear; clc; close all;
 
+addpath('libsvm');
+
 BLOCK_SIZE = [32 32];
 PATCH_SIZE = 4;
 BINS = 8;
 NORM_KERNEL_SIZE = 2;
-DISPLAY = true;
+DISPLAY = false;
 STEP = 2;
 
-I = rgb2gray(imread('samples/sample.jpg'));
+I = rgb2gray(imread('samples/people.jpg'));
 
 load('svm_model.mat', 'svm_model');
 [m,p,g] = gradient(I);
@@ -18,6 +20,7 @@ x_range = 1:STEP:last_x_index;
 y_range = 1:STEP:last_y_index;
 
 f = figure;
+detected_faces = [];
 I_disp = cat(3, I, I, I);
 fprintf("Processando");
 for i = y_range
@@ -34,19 +37,17 @@ for i = y_range
         
         block = I(b_ver, b_hor);
         hist = hog(block, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
-        [is_face, score] = predict(svm_model, hist(:)');
-        if is_face == 1 && max(score) > 0.5
-            if DISPLAY
-                % Desenha um retângulo amarelo
-                I_disp(b_ver, j, :) = 255;
-                I_disp(b_ver, j, 3) = 0;
-                I_disp(b_ver, j + BLOCK_SIZE(2), :) = 255;
-                I_disp(b_ver, j + BLOCK_SIZE(2), 3) = 0;
-                I_disp(i, b_hor, :) = 255;
-                I_disp(i, b_hor, 3) = 0;
-                I_disp(i + BLOCK_SIZE(1), b_hor, :) = 255;
-                I_disp(i + BLOCK_SIZE(1), b_hor, 3) = 0;
-            end
+        [label, accuracy, probability] = svmpredict(1, sparse(hist(:)'), svm_model, '-q -b 1');
+        if label == 1 && probability(label + 1) > 0.98
+            % Desenha um retângulo amarelo
+            I_disp(b_ver, j, :) = 255;
+            I_disp(b_ver, j, 3) = 0;
+            I_disp(b_ver, j + BLOCK_SIZE(2), :) = 255;
+            I_disp(b_ver, j + BLOCK_SIZE(2), 3) = 0;
+            I_disp(i, b_hor, :) = 255;
+            I_disp(i, b_hor, 3) = 0;
+            I_disp(i + BLOCK_SIZE(1), b_hor, :) = 255;
+            I_disp(i + BLOCK_SIZE(1), b_hor, 3) = 0;
         end
     end
 end

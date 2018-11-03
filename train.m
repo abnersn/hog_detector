@@ -1,5 +1,6 @@
-clear; clc;
-close all;
+clear; clc; close all;
+
+addpath('libsvm');
 
 SAMPLES_SIZE = [32 32];
 PATCH_SIZE = 4;
@@ -74,7 +75,7 @@ train_data = [train_data_negative'; train_data_positive'];
 class_data = [zeros(IMAGES_NEGATIVE, 1); ones(IMAGES_POSITIVE, 1)];
 
 fprintf('Treinando SVM\n');
-svm_model = fitcsvm(train_data, class_data);
+svm_model = svmtrain(class_data, sparse(train_data), '-q -b 1');
 
 save('svm_model.mat', 'svm_model');
 
@@ -88,7 +89,7 @@ for i=1:size(test_negative, 3)
 
     hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
 
-    label = predict(svm_model, hist(:)');
+    label = svmpredict(0, sparse(hist(:)'), svm_model, '-q');
     if label ~= 0
         error = error + 1;
     end
@@ -101,7 +102,7 @@ for i=1:size(test_positive, 3)
 
     hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
 
-    label = predict(svm_model, hist(:)');
+    label = svmpredict(0, sparse(hist(:)'), svm_model, '-q');
     if label ~= 1
         error = error + 1;
     end
