@@ -1,8 +1,23 @@
-function [ hist ] = histograms( M, P, patch_size, bins )
-%HISTOGRAMS Summary of this function goes here
-%   Detailed explanation goes here
+%%% UNIVERSIDADE FEDERAL DO CEARÁ
+%%% CAMPUS SOBRAL
+%%% PROCESSAMENTO DIGITAL DE SINAIS 2018.2
 
-% Índices dos bins do histograma ao qual o pixel será associado.
+%%% ABNER SOUSA NASCIMENTO 374864
+
+function [ hist ] = histograms( M, P, patch_size, bins )
+%HISTOGRAMS Calcula histogramas dos vetores gradiente.
+%   Percorre a imagem em blocos e calcula histogramas para as direções dos
+%   gradientes de cada pixel.
+%
+%   Entradas:
+%       M - Magnitude dos vetores gradiente.
+%       P - Ângulos dos vetores gradiente em relação ao semi-eixo +x.
+%       patch_size - Tamanho do bloco de varredura.
+%       bins - Quantidade de setores do histograma.
+%   
+%   Saídas:
+%       hist - Matrizes com os valores de cada bin do histograma.
+
 indexes = floor((P/pi + 1) / 2 * bins) + 1;
 indexes = indexes - (indexes == (bins + 1));
 

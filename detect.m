@@ -4,8 +4,7 @@
 
 %%% ABNER SOUSA NASCIMENTO 374864
 
-%%% detect.m: Script para deteção de faces em imagens usando descritores
-%%% HOG e um classificador SVM.
+%%% detect.m: Aplica o método de detecção de faces implementado.
 
 clear; clc; close all;
 
@@ -42,7 +41,7 @@ detecttions = [];
 % Níveis de confiança para cada uma das detecções.
 confidences = [];
 
-fprintf("\nProcessando...\n");
+fprintf("Processando, por favor aguarde...\n");
 for i = y_range
     for j = x_range
         h_range = j:(j + BLOCK_SIZE(1) - 1);
@@ -89,9 +88,9 @@ for i = y_range
     end
 end
 
-faces = nonmaxsup(detecttions, confidences, 0.3, BLOCK_SIZE);
+faces = nonmaxsup(detecttions, confidences, 0.3);
 
-fprintf("\nConcluído\n");
+fprintf("Concluído.\n");
 I = cat(3, I, I, I);
 hold on;
 imshow(I);

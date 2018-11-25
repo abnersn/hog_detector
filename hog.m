@@ -1,6 +1,21 @@
+%%% UNIVERSIDADE FEDERAL DO CEARÁ
+%%% CAMPUS SOBRAL
+%%% PROCESSAMENTO DIGITAL DE SINAIS 2018.2
+
+%%% ABNER SOUSA NASCIMENTO 374864
+
 function [ hist ] = hog( I, patch_size, bins, norm_kernel )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%HOG Sintetiza as operações necessárias para cálculo dos descritores HOG.
+%
+%   Entradas:
+%       I - Imagem para cálculo dos descritores.
+%       patch_size - Tamanho do bloco de varredura.
+%       bins - Quantidade de setores do histograma.
+%       norm_kernel - Quantidade de blocos utilizados na normalização.
+%   
+%   Saídas:
+%       hist - Matrizes com os valores de cada bin do histograma.
+
 
 %%% Cálculo do gradiente
 [M, P] = gradient(I);
