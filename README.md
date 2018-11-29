@@ -7,7 +7,7 @@ Os softwares abaixo (ou versões compatíveis) são necessários para executar o
 * [LibSVM 3.23](https://www.csie.ntu.edu.tw/~cjlin/libsvm/) (incluso no repositório);
 
 ## Como executar
-O repositório já inclui classificadores SVM pré treinados com parte dos dados (200 amostras positivas e 20.000 negativas), nos arquivos `svm_model_sobel.mat` e `svm_model_prewitt`. Para efetuar a detecção, execute o script `detect.m`, especificando o arquivo de imagem na linha 21 e o filtro a ser utilizado na linha 19.
+O repositório já inclui classificadores SVM pré treinados com parte dos dados (200 amostras positivas e 20.000 negativas), nos arquivos `svm_model_sobel.mat` e `svm_model_prewitt.mat`. Para efetuar a detecção, execute o script `detect.m`, especificando o arquivo de imagem na linha 21 e o filtro a ser utilizado na linha 19.
 
 ## Como treinar um novo modelo
 Para treino do classificador SVM, são necessárias amostras de imagens com tamanho 32x32 que contém faces (positivas) e que não contém (negativas). Para melhor desempenho, as amostras devem apresentar similaridade com os blocos da janela deslizante que serão processados durante a fase de detecção. As imagens devem ser organizadas conforme a seguinte estrutura de diretórios:
