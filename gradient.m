@@ -4,15 +4,17 @@
 
 %%% ABNER SOUSA NASCIMENTO 374864
 
-function [ M, P, G ] = gradient( I )
+function [ M, P, G ] = gradient( I, filter )
 %GRADIENT Calcula o gradiente de uma imagem e retorna a magnitude e a fase.
 %   Os gradientes são calculados a partir da convolução dos operadores de
-%   Sobel sobre a imagem. O resultado são os coeficientes horizontais e
-%   verticais dos vetores. Então, os equivalentes em coordenadas polares
-%   (ângulo e magnitude) são calculados e retornados pela função.
+%   Sobel e Prewitt sobre a imagem. O resultado são os coeficientes
+%   horizontais e verticais dos vetores. Então, os equivalentes em
+%   coordenadas polares (ângulo e magnitude) são calculados e
+%   retornados pela função.
 %
 %   Inputs:
 %       I - Imagem em escala de cinzas.
+%       filter - Nome do filtro a ser utilizado (sobel ou prewitt).
 %   
 %   Outputs:
 %       M - Magnitude dos gradientes.
@@ -23,9 +25,16 @@ function [ M, P, G ] = gradient( I )
 sobel_x = [-1 0 1; -2 0 2; -1 0 1];
 sobel_y = [1 2 1; 0 0 0; -1 -2 -1];
 
-% Convolução 2D dos filtros de Sobel
-G = cat(3, conv2(I, sobel_x, 'same'), conv2(I, sobel_y, 'same'));
+% Filtros de Prewitt
+prewitt_x = [-1 0 1; -1 0 1; -1 0 1];
+prewitt_y = [-1 -1 -1; 0 0 0; 1 1 1];
 
+% Convolução 2D dos filtros
+if strcmp(filter, 'sobel')
+    G = cat(3, conv2(I, sobel_x, 'same'), conv2(I, sobel_y, 'same'));
+elseif strcmp(filter, 'prewitt')
+    G = cat(3, conv2(I, prewitt_x, 'same'), conv2(I, prewitt_y, 'same'));
+end
 % Magnitude dos vetores
 M = sqrt(sum(G.^2, 3));
 

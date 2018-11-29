@@ -16,6 +16,7 @@ NORM_KERNEL_SIZE = 2; % Tamanho do kernel de normalização dos histogramas.
 IMAGES_POSITIVE = 200; % Quantidade de amostras positivas.
 IMAGES_NEGATIVE = 20000; % Quantidade de amostras negativa.
 TRAIN_PERCENT = 70; % Percentual a ser usado para treino.
+FILTER = 'prewitt'; % Filtro a ser utilizado
 
 % Carregamento das amostras
 fprintf('Lendo imagens\n');
@@ -64,13 +65,13 @@ train_data_positive = zeros(prod(SAMPLES_SIZE / PATCH_SIZE) * BINS, IMAGES_POSIT
 fprintf('Calculando descritores\n');
 for i = 1:negative_trainset_size
     I = train_negative(:, :, i);
-    hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
+    hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE, FILTER);
     train_data_negative(:, i) = hist(:);
 end
 
 for i = 1:positive_trainset_size
     I = train_positive(:, :, i);
-    hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
+    hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE, FILTER);
     train_data_positive(:, i) = hist(:);
 end
 
@@ -81,8 +82,12 @@ class_data = [zeros(IMAGES_NEGATIVE, 1); ones(IMAGES_POSITIVE, 1)];
 fprintf('Treinando SVM\n');
 svm_model = svmtrain(class_data, sparse(train_data), '-q -b 1');
 
-save('svm_model.mat', 'svm_model');
-
+if strcmp(FILTER, 'sobel')
+    save('svm_model_sobel.mat', 'svm_model');
+elseif strcmp(FILTER, 'prewitt')
+    save('svm_model_prewitt.mat', 'svm_model');
+end
+    
 error = 0;
 false_positives = 0;
 false_negatives = 0;
@@ -93,7 +98,7 @@ fprintf('Calculando acurácia...\n');
 for i=1:size(test_negative, 3)
     I = test_negative(:,:, i);
 
-    hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
+    hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE, FILTER);
 
     label = svmpredict(0, sparse(hist(:)'), svm_model, '-q');
     if label ~= 0
@@ -106,7 +111,7 @@ end
 for i=1:size(test_positive, 3)    
     I = test_positive(:,:, i);
 
-    hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
+    hist = hog(I, PATCH_SIZE, BINS, NORM_KERNEL_SIZE, FILTER);
 
     label = svmpredict(0, sparse(hist(:)'), svm_model, '-q');
     if label ~= 1

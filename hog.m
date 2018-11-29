@@ -4,7 +4,7 @@
 
 %%% ABNER SOUSA NASCIMENTO 374864
 
-function [ hist ] = hog( I, patch_size, bins, norm_kernel )
+function [ hist ] = hog( I, patch_size, bins, norm_kernel, filter )
 %HOG Sintetiza as operações necessárias para cálculo dos descritores HOG.
 %
 %   Entradas:
@@ -12,13 +12,14 @@ function [ hist ] = hog( I, patch_size, bins, norm_kernel )
 %       patch_size - Tamanho do bloco de varredura.
 %       bins - Quantidade de setores do histograma.
 %       norm_kernel - Quantidade de blocos utilizados na normalização.
+%       filter - Filtro a ser utilizado no cálculo dos gradientes.
 %   
 %   Saídas:
 %       hist - Matrizes com os valores de cada bin do histograma.
 
 
 %%% Cálculo do gradiente
-[M, P] = gradient(I);
+[M, P] = gradient(I, filter);
 
 %%% Cálculo dos histogramas
 hist = histograms(M, P, patch_size, bins);

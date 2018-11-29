@@ -16,12 +16,18 @@ NORM_KERNEL_SIZE = 2; % Tamanho do kernel de normalização dos histogramas.
 DISPLAY = true; % Ativar/desativar a visualização da varredura da imagem.
 STEP = 2; % Distância em pixels entre os blocos da varredura.
 MIN_CONFIDENCE = 0.98; % Nível de confiança mínimo para detecção da face.
+FILTER = 'prewitt'; % Filtro a ser utilizado
 
 % Leitura da imagem.
-I = rgb2gray(imread('samples/sample_3.jpg'));
+I = rgb2gray(imread('samples/sample_4.jpg'));
 
 % Carregamento do classificador treinado com o script train.m.
-load('svm_model.mat', 'svm_model');
+if strcmp(FILTER, 'sobel')
+    load('svm_model_sobel.mat', 'svm_model');
+elseif strcmp(FILTER, 'prewitt')
+    load('svm_model_prewitt.mat', 'svm_model');
+end
+
 
 % Definição dos intervalos de índices para a varredura.
 last_y_index = BLOCK_SIZE(1) * (floor(size(I, 1) / BLOCK_SIZE(1)) - 1);
@@ -61,7 +67,7 @@ for i = y_range
         block = I(v_range, h_range);
         
         % Calcula histogramas
-        hist = hog(block, PATCH_SIZE, BINS, NORM_KERNEL_SIZE);
+        hist = hog(block, PATCH_SIZE, BINS, NORM_KERNEL_SIZE, FILTER);
 
         % Realiza predição
         [label, ~, confidence] = svmpredict(...

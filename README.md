@@ -5,13 +5,12 @@ Os softwares abaixo (ou versões compatíveis) são necessários para executar o
 * [MATLAB r2017a](https://www.mathworks.com/products/matlab.html);
 * [Mathworks Image Acquisition Toolbox](https://www.mathworks.com/products/imaq.html);
 * [LibSVM 3.23](https://www.csie.ntu.edu.tw/~cjlin/libsvm/) (incluso no repositório);
-* Sistema Operacional Windows;
 
 ## Como executar
-O repositório já inclui um classificador SVM pré treinado com parte dos dados (200 amostras positivas e 20.000 negativas), no arquivo `svm_model.mat`. Para efetuar a detecção, execute o script `detect.m`, especificando o arquivo de imagem na linha 21.
+O repositório já inclui classificadores SVM pré treinados com parte dos dados (200 amostras positivas e 20.000 negativas), nos arquivos `svm_model_sobel.mat` e `svm_model_prewitt`. Para efetuar a detecção, execute o script `detect.m`, especificando o arquivo de imagem na linha 21 e o filtro a ser utilizado na linha 19.
 
 ## Como treinar um novo modelo
-Para treino do classificador SVM, são necessárias amostras de imagens com tamanho 32x32 que contém faces (positivas) e que não contém (negativas). Para melhor desempenho, as amostras devem apresentar similaridade com os blocos da janela deslizante que serão processados durante a fase de detecção. As imagens devem ser organizadas conforme a seguinte estrutura de diretórios e nomenclaturas:
+Para treino do classificador SVM, são necessárias amostras de imagens com tamanho 32x32 que contém faces (positivas) e que não contém (negativas). Para melhor desempenho, as amostras devem apresentar similaridade com os blocos da janela deslizante que serão processados durante a fase de detecção. As imagens devem ser organizadas conforme a seguinte estrutura de diretórios:
 ```
 - data
     |_ positive
@@ -25,7 +24,8 @@ Para treino do classificador SVM, são necessárias amostras de imagens com tama
 ```
 O arquivo `data.zip` contém amostras já preparadas, basta extrair a pasta no mesmo diretórios dos scripts. Há 6.123 exemplares positivos e 24.128 negativos. Para evitar lentidão no processamento, não recomenda-se o uso de todas as amostras, mas sim uma quantidade inferior, preferencialmente na razão de 100 exemplares negativos para cada exemplar positivo.
 
-Uma vez organizados os dados para treino, basta executar o script `train.m`, especificando os parâmetros de treino desejados. O script deve produzir um arquivo `svm_model.mat`, que pode ser usado para executar a detecção.
+Uma vez organizados os dados para treino, basta executar o script `train.m`, especificando os parâmetros de treino desejados. O script deve produzir um arquivo `svm_model_sobel.mat` ou `svm_model_prewitt.mat`, conforme o filtro escolhido, que pode ser usado para executar a detecção.
 
 **Autor:**
-Abner Sousa Nascimento.
+Abner Sousa Nascimento
+**Processamento Digital de Sinais 2018.2**
