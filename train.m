@@ -16,7 +16,7 @@ NORM_KERNEL_SIZE = 2; % Tamanho do kernel de normalização dos histogramas.
 IMAGES_POSITIVE = 200; % Quantidade de amostras positivas.
 IMAGES_NEGATIVE = 20000; % Quantidade de amostras negativa.
 TRAIN_PERCENT = 70; % Percentual a ser usado para treino.
-FILTER = 'prewitt'; % Filtro a ser utilizado
+FILTER = 'sobel'; % Filtro a ser utilizado
 
 % Carregamento das amostras
 fprintf('Lendo imagens\n');

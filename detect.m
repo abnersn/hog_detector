@@ -16,10 +16,10 @@ NORM_KERNEL_SIZE = 2; % Tamanho do kernel de normalização dos histogramas.
 DISPLAY = true; % Ativar/desativar a visualização da varredura da imagem.
 STEP = 2; % Distância em pixels entre os blocos da varredura.
 MIN_CONFIDENCE = 0.98; % Nível de confiança mínimo para detecção da face.
-FILTER = 'prewitt'; % Filtro a ser utilizado
+FILTER = 'sobel'; % Filtro a ser utilizado
 
 % Leitura da imagem.
-I = rgb2gray(imread('samples/sample_4.jpg'));
+I = rgb2gray(imread('samples/sample_1.jpg'));
 
 % Carregamento do classificador treinado com o script train.m.
 if strcmp(FILTER, 'sobel')
@@ -42,7 +42,7 @@ if DISPLAY
 end
 
 % Vetor para armazenar as faces detectadas.
-detecttions = [];
+detections = [];
 
 % Níveis de confiança para cada uma das detecções.
 confidences = [];
@@ -78,7 +78,7 @@ for i = y_range
         
         if label == 1 && confidence(label + 1) > MIN_CONFIDENCE
             rect = [i j BLOCK_SIZE];
-            detecttions = [detecttions; rect];
+            detections = [detections; rect];
             confidences = [confidences; confidence(label + 1)];
             
             if DISPLAY
@@ -94,7 +94,11 @@ for i = y_range
     end
 end
 
-faces = nonmaxsup(detecttions, confidences, 0.3);
+if length(detections) > 1
+    faces = nonmaxsup(detections, confidences, 0.3);
+else
+    faces = detections;
+end
 
 fprintf("Concluído.\n");
 I = cat(3, I, I, I);
