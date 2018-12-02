@@ -38,7 +38,7 @@ end
 % Magnitude dos vetores
 M = sqrt(sum(G.^2, 3));
 
-% Fase dos vetores
+% Ângulos dos vetores
 P = atan2(G(:,:,2), G(:,:,1));
 
 end
