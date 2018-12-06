@@ -16,10 +16,10 @@ NORM_KERNEL_SIZE = 2; % Tamanho do kernel de normalização dos histogramas.
 DISPLAY = true; % Ativar/desativar a visualização da varredura da imagem.
 STEP = 2; % Distância em pixels entre os blocos da varredura.
 MIN_CONFIDENCE = 0.98; % Nível de confiança mínimo para detecção da face.
-FILTER = 'sobel'; % Filtro a ser utilizado
+FILTER = 'prewitt'; % Filtro a ser utilizado
 
 % Leitura da imagem.
-I = rgb2gray(imread('samples/sample_1.jpg'));
+I = rgb2gray(imread('samples/sample_3.jpg'));
 
 % Carregamento do classificador treinado com o script train.m.
 if strcmp(FILTER, 'sobel')

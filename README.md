@@ -22,9 +22,7 @@ Para treino do classificador SVM, são necessárias amostras de imagens com tama
         |_ negative_2.jpg
         |_ ...
 ```
-O arquivo `data.zip` contém amostras já preparadas, basta extrair a pasta no mesmo diretórios dos scripts. Há 6.123 exemplares positivos e 24.128 negativos. Para evitar lentidão no processamento, não recomenda-se o uso de todas as amostras, mas sim uma quantidade inferior, preferencialmente na razão de 100 exemplares negativos para cada exemplar positivo.
-
-Uma vez organizados os dados para treino, basta executar o script `train.m`, especificando os parâmetros de treino desejados. O script deve produzir um arquivo `svm_model_sobel.mat` ou `svm_model_prewitt.mat`, conforme o filtro escolhido, que pode ser usado para executar a detecção.
+A pasta `data` contém amostras já preparadas, com 200 exemplares positivos e 20 mil negativos. Uma vez organizados os dados para treino, basta executar o script `train.m`, especificando os parâmetros de treino desejados. O script deve produzir um arquivo `svm_model_sobel.mat` ou `svm_model_prewitt.mat`, conforme o filtro escolhido. Os arquivos `.mat` contém os modelos SVM usados para executar a detecção.
 
 **Autor:**
 Abner Sousa Nascimento
