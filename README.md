@@ -202,7 +202,7 @@ Após o cálculo dos vetores gradientes, a imagem é setorizada em blocos quadra
 
 <figure>
 <img src="https://s3.amazonaws.com/abnersn/github/hog-detector/histograma.jpg" alt=" Processo de construção dos histograma em um bloco 3\times3, com 4 intervalos de orientações." width="70%" />
-<figcaption> Processo de construção dos histograma em um bloco <img style="vertical-align:middle" src="https://latex.codecogs.com/png.latex?3%5Ctimes3" alt="3\times3" title="3\times3" />, com 4 intervalos de orientações.</figcaption>
+<figcaption> Processo de construção dos histograma em um bloco 3 por 3 com 4 intervalos de orientações.</figcaption>
 </figure>
 
 <figure><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/image_comb.jpg" width="70%" alt="HOG" /><figcaption> Representação gráfica dos histogramas de gradientes orientados da imagem
