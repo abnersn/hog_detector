@@ -56,12 +56,11 @@ Abner Sousa Nascimento
 
 A capacidade de reconhecer rostos familiares é uma habilidade inata dos seres humanos, fruto evolutivo da necessidade de interação social e comunicação entre indivíduos de uma espécie na qual a visão é um dos principais sentidos. Entretanto, em termos computacionais, essa habilidade não é trivial, uma vez que a representação matemática da face, em seus diversos ângulos e formas, é inerentemente não-linear e não-convexa. Na ilustração abaixo, encontram-se exemplificados graus de variabilidade possíveis na imagem de um rosto humano.
 
-<figure>
+<p align="center">
 <img src="https://s3.amazonaws.com/abnersn/github/hog-detector/variacoes_.jpg" alt=" Exemplos de possíveis variações de aspectos como ângulo, expressão, oclusão e condições de iluminação para imagens de faces." width="80.0%" />
-<figcaption>
-Exemplos de possíveis variações de aspectos como ângulo, expressão, oclusão e condições de iluminação para imagens de faces.
-</figcaption>
-</figure>
+<br>
+<i>Exemplos de possíveis variações de aspectos como ângulo, expressão, oclusão e condições de iluminação para imagens de faces.</i>
+</p>
 
 Porém, independentemente do nível de sofisticação do método empregado na tarefa de identificação, o passo primordial no fluxo de implementação geral de sistemas de reconhecimento facial passa pela segmentação da região da face, _i.e._, a detecção facial. Tal fase, por sua vez, depende de uma série de operações de filtragem e pré-processamento que viabilizam a extração das características descritivas imprescindíveis à maioria dos algoritmos e metodologias. Assim, a compreensão das imagens enquanto entidades matemáticas que codificam mensagens e, portanto, estão intrinsecamente ligadas ao conceito de sinais, revela-se uma tarefa de crítica importância na implementação de sistemas computacionais que buscam imitar a visão humana.
 
@@ -77,23 +76,25 @@ Assim, qualquer sinal bidimensional pode ser representado por uma soma de impuls
 
 ![](https://latex.codecogs.com/png.latex?%5Clabel%7Beq%3Asoma%7D%0A%20%20%20%20s%5Bx%2C%20y%5D%20%3D%20%5Csum_%7Bk_1%20%3D%20-%5Cinfty%7D%5E%7B%5Cinfty%7D%5Csum_%7Bk_2%20%3D%20-%5Cinfty%7D%5E%7B%5Cinfty%7Ds%5Bk_1%2C%20k_2%5D%5Cdelta%5Bx%20-%20k_1%2C%20y%20-%20k_2%5D.)
 
-<figure>
+<p align="center">
 <img src="https://s3.amazonaws.com/abnersn/github/hog-detector/impulso.jpg" alt=" Representação gráfica da função impulso bidimensional." width="40%" />
-<figcaption>
+<br>
+<i>
 Representação gráfica da função impulso bidimensional.
-</figcaption>
-</figure>
+</i>
+</p>
 
 Computacionalmente, uma imagem digital em níveis de cinza consiste numa matriz ![](https://latex.codecogs.com/png.latex?A_%7Bm%20%5Ctimes%20n%7D), cujos elementos, chamados de _pixels_, representam níveis de brilho que os componentes da mídia utilizada para exibição devem assumir. Imagens coloridas são representadas por múltiplas matrizes, denominadas canais, de modo que cada uma carrega as informações de intensidade apenas para a componente de cor à qual está associada. Neste trabalho, a fim de sintetizar as definições, apenas imagens em níveis de cinza serão consideradas nas seções que se seguem.
 
 Uma imagem digital pode, portanto, ser representada por uma função bidimensional ![i[x, y]](https://latex.codecogs.com/png.latex?i%5Bx%2C%20y%5D "i[x, y]"), em que ![](https://latex.codecogs.com/png.latex?x) e ![](https://latex.codecogs.com/png.latex?y) representam índices de um elemento ![](https://latex.codecogs.com/png.latex?a_%7Bxy%7D) na matriz de _pixels_. Como os elementos ![](https://latex.codecogs.com/png.latex?a_%7Bxy%7D) carregam informações sobre níveis de intensidade luminosa, uma imagem ![i[x, y]](https://latex.codecogs.com/png.latex?i%5Bx%2C%20y%5D "i[x, y]") é, em geral, convencionada como um sinal puramente real, _i.e._, sem componentes complexas. Na figura a seguir, é possível visualizar uma imagem digital tanto em sua forma matricial quanto a função discreta bidimensional associada.
 
-<figure>
+<p align="center">
 <img src="https://s3.amazonaws.com/abnersn/github/hog-detector/plotdisc.jpg" alt="Uma imagem digital e o gráfico da função discreta." width="70%"/>
-<figcaption>
+<br>
+<i>
 Uma imagem digital e o gráfico da função discreta.
-</figcaption>
-</figure>
+</i>
+</p>
 
 ### Processamento de sinais bidimensionais discretos
 
@@ -105,12 +106,13 @@ Um sistema bidimensional é definido como um operador matemático ![](https://la
 
 - **Invariância**: ![T{i[x - x_0, y - y_0]} = o[x - x_0, y - y_0]](https://latex.codecogs.com/png.latex?T%5C%7Bi%5Bx%20-%20x_0%2C%20y%20-%20y_0%5D%5C%7D%20%3D%20o%5Bx%20-%20x_0%2C%20y%20-%20y_0%5D "T{i[x - x_0, y - y_0]} = o[x - x_0, y - y_0]").
 
-<figure>
+<p align="center">
 <img src="https://s3.amazonaws.com/abnersn/github/hog-detector/SLIT_2D.jpg" alt="[fig:slit2d] Representação em blocos de um sistema bidimensional." width="40%" />
-<figcaption>
+<br>
+<i>
 Representação em blocos de um sistema bidimensional.
-</figcaption>
-</figure>
+</i>
+</p>
 
 ### Convolução
 
@@ -120,23 +122,23 @@ Se um sistema ![](https://latex.codecogs.com/png.latex?T) observa as propriedade
 
 Em imagens, a convolução pode ser visualmente compreendida em termos de janelas deslizantes. Nesse processo, a resposta ao impulso do sistema ![](https://latex.codecogs.com/png.latex?h%5Bx%2C%20y%5D), representada na forma matricial, é deslizada sobre a imagem. Pelo resultado acima, cada _pixel_ da saída corresponde, portanto, à soma das multiplicações ponto a ponto entre a matriz de ![](https://latex.codecogs.com/png.latex?h%5Bx%2C%20y%5D) e os elementos da imagem sobre os quais ela está sobreposta. Uma ilustração para um dos passos do processo está exposta na figura abaixo. No contexto do processamento de imagens, a resposta ao impulso ![](https://latex.codecogs.com/png.latex?h) é denominada máscara de filtragem.
 
-<figure>
-<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/conv2d.jpg" alt="[fig:slit2d] Representação em blocos de um sistema bidimensional." width="60%" />
-<figcaption>
+<p align="center">
+<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/conv2d.jpg" alt="[fig:slit2d] Representação em blocos de um sistema bidimensional." width="60%" /><br>
+<i>
 Um dos passos do processo de convolução de uma imagem e da resposta ao impulso de um sistema para o cálculo do elemento central da saída.
-</figcaption>
-</figure>
+</i>
+</p>
 
 ### Filtros diferenciadores
 
 O operador gradiente ![](https://latex.codecogs.com/png.latex?%5Cnabla%20f%28a%2C%20b%29%20%3D%20%5Cleft%28%5Cfrac%20%7B%5Cpartial%20f%28a%2C%20b%29%7D%7B%5Cpartial%20a%7D%2C%20%5Cfrac%20%7B%5Cpartial%20f%28a%2C%20b%29%7D%7B%5Cpartial%20b%7D%5Cright%29), definido sobre funções contínuas, expressa a magnitude, direção e sentido de variação nos valores de uma função de duas variáveis ![](https://latex.codecogs.com/png.latex?f%28a%2C%20b%29), ao longo de seu domínio. Em sinais unidimensionais, é possível expressar um diferenciador ![](https://latex.codecogs.com/png.latex?g%28a%29%20%3D%20%5Cfrac%7Bdf%28a%29%7D%7Bda%7D) como um sistema cuja resposta em frequência ideal é ![](https://latex.codecogs.com/png.latex?G%28j%5COmega%29%20%3D%20j%5COmega). As respostas em magnitude e fase do diferenciador ideal são representadas nos gráficos a seguir.
 
-<figure>
-<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/ideal.jpg" title="fig:" alt="Resposta em frequência para o filtro diferenciador ideal." />
-<figcaption>
+<p align="center">
+<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/ideal.jpg" title="fig:" alt="Resposta em frequência para o filtro diferenciador ideal." /><br>
+<i>
 Resposta em frequência para o filtro diferenciador ideal.
-</figcaption>
-</figure>
+</i>
+</p>
 
 Em muitas aplicações do processamento de imagens, o cálculo do gradiente é útil para demarcar contornos e sintetizar as formas dos objetos. Entretanto, esse operador não pode ser utilizado, a rigor, no contexto discreto das imagens digitais. Todavia, se ![](https://latex.codecogs.com/png.latex?i_c%28x%2C%20y%29) for uma função contínua a partir da qual ![](https://latex.codecogs.com/png.latex?i%5Bx%2C%20y%5D) foi amostrada, é possível obter uma aproximação para as derivadas parciais de ![](https://latex.codecogs.com/png.latex?i_c) através da equação a seguir, com os intervalos discretos ![](https://latex.codecogs.com/png.latex?%5CDelta%20x) e ![](https://latex.codecogs.com/png.latex?%5CDelta%20y) tão pequenos quanto possível. Essa formulação é a base para a definição dos filtros de Prewitt e Sobel.
 
@@ -150,19 +152,19 @@ O filtro de Prewitt consiste numa implementação não-escalonada da equação d
 
 Essas máscaras advém da convolução de dois filtros unidimensionais, um derivador ![](https://latex.codecogs.com/png.latex?h_d), a ser aplicado no eixo principal, e um suavizador, ![](https://latex.codecogs.com/png.latex?h_s), aplicado no eixo transversal. Abaixo, encontram-se expressas as componentes do filtro de Prewitt para cálculo da derivada no eixo horizontal. As componentes verticais estão expostas logo a seguir.
 
-<figure>
-<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/diferenciador_prewitt.jpg" alt="Diferenciador." />
-<figcaption>
+<p align="center">
+<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/diferenciador_prewitt.jpg" alt="Diferenciador." /><br>
+<i>
 Resposta em frequência da componente diferenciadora do filtro de Prewitt.
-</figcaption>
-</figure>
+</i>
+</p>
 
-<figure>
-<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/suavizador_prewitt.jpg" alt="Suavizador." />
-<figcaption>
+<p align="center">
+<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/suavizador_prewitt.jpg" alt="Suavizador." /><br>
+<i>
 Resposta em frequência da componente suavizadora do filtro de Prewitt.
-</figcaption>
-</figure>
+</i>
+</p>
 
 ![](https://latex.codecogs.com/png.latex?%5Clabel%7Beq%3Aprewittcomp%7D%0A%20%20%20%20h_x%5Bx%2C%20y%5D%20%3D%20h_s%5By%5D%20%2A%20h_d%5Bx%5D%20%3D%0A%20%20%20%20%5Cbegin%7Bbmatrix%7D%0A%20%20%20%20-1%20%26%200%20%26%201%20%5C%5C%0A%20%20%20%20-1%20%26%200%20%26%201%20%5C%5C%0A%20%20%20%20-1%20%26%200%20%26%201%20%5C%5C%0A%20%20%20%20%5Cend%7Bbmatrix%7D%20%3D%20%0A%20%20%20%20%5Cbegin%7Bbmatrix%7D%0A%20%20%20%201%20%5C%5C%0A%20%20%20%201%20%5C%5C%0A%20%20%20%201%20%5C%5C%0A%20%20%20%20%5Cend%7Bbmatrix%7D%20%2A%0A%20%20%20%20%5Cbegin%7Bbmatrix%7D%0A%20%20%20%20-1%20%26%200%20%26%201%0A%20%20%20%20%5Cend%7Bbmatrix%7D)
 
@@ -178,19 +180,19 @@ O filtro de Sobel é uma variação do filtro de Prewitt, com o sinal da compone
 
 ![](https://latex.codecogs.com/png.latex?%5Clabel%7Beq%3Asobelv%7D%0A%20%20%20%20h_y%5Bx%2C%20y%5D%20%3D%20h_d%5Bx%5D%5ET%20%2A%20h_s%5By%5D%5ET%20%3D%0A%20%20%20%20%5Cbegin%7Bbmatrix%7D%0A%20%20%20%201%20%26%202%20%26%201%20%5C%5C%0A%20%20%20%200%20%26%200%20%26%200%20%5C%5C%0A%20%20%20%20-1%20%26%20-2%20%26%20-1%20%5C%5C%0A%20%20%20%20%5Cend%7Bbmatrix%7D%20%3D%0A%20%20%20%20%5Cbegin%7Bbmatrix%7D%0A%20%20%20%20%20%20%20%201%20%5C%5C%0A%20%20%20%20%20%20%20%200%20%5C%5C%0A%20%20%20%20%20%20%20%20-1%0A%20%20%20%20%5Cend%7Bbmatrix%7D%20%2A%0A%20%20%20%20%5Cbegin%7Bbmatrix%7D%0A%20%20%20%201%20%26%202%20%26%201%0A%20%20%20%20%5Cend%7Bbmatrix%7D)
 
-<figure>
-<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/derivador.jpg" alt="Diferenciador." />
-<figcaption>
+<p align="center">
+<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/derivador.jpg" alt="Diferenciador." /><br>
+<i>
 Resposta em frequência da componente diferenciadora do filtro de Sobel.
-</figcaption>
-</figure>
+</i>
+</p>
 
-<figure>
-<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/suavizador.jpg" alt="Suavizador." />
-<figcaption>
+<p align="center">
+<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/suavizador.jpg" alt="Suavizador." /><br>
+<i>
 Resposta em frequência da componente suavizadora do filtro de Sobel.
-</figcaption>
-</figure>
+</i>
+</p>
 
 ### Histogramas de gradientes
 
@@ -202,19 +204,19 @@ Em que ![](https://latex.codecogs.com/png.latex?o_x) e ![](https://latex.codecog
 
 Após o cálculo dos vetores gradientes, a imagem é setorizada em blocos quadrados de igual tamanho. Para cada bloco, um histograma das faixas de ângulos existentes é construído, de modo que o valor dos intervalos corresponde à soma das magnitudes dos ângulos correspondentes. O processo é ilustrado na imagem abaixo para blocos de tamanho ![](https://latex.codecogs.com/png.latex?3%20%5Ctimes%203) e um histograma de ![](https://latex.codecogs.com/png.latex?4) setores. Na figura seguinte, encontra-se uma imagem descrita por histogramas de gradientes orientados de uma imagem de dimensões ![](https://latex.codecogs.com/png.latex?128%5Ctimes%20128), blocos de tamanho ![](https://latex.codecogs.com/png.latex?8%20%5Ctimes%208) e histogramas de ![](https://latex.codecogs.com/png.latex?9) setores. As linhas brancas localizadas sobre os blocos expressam a magnitude final de cada setor do histograma após a soma dos módulos dos vetores.
 
-<figure>
-<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/histograma.jpg" alt=" Processo de construção dos histograma em um bloco 3\times3, com 4 intervalos de orientações." width="70%" />
-<figcaption> Processo de construção dos histograma em um bloco 3 por 3 com 4 intervalos de orientações.</figcaption>
-</figure>
+<p align="center">
+<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/histograma.jpg" alt=" Processo de construção dos histograma em um bloco 3\times3, com 4 intervalos de orientações." width="70%" /><br>
+<i> Processo de construção dos histograma em um bloco 3 por 3 com 4 intervalos de orientações.</i>
+</p>
 
-<figure><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/image_comb.jpg" width="70%" alt="HOG" /><figcaption> Representação gráfica dos histogramas de gradientes orientados da imagem
-de um rosto, calculados com 9 intervalos em blocos de tamanho 8 por 8.</figcaption></figure>
+<p align="center"><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/image_comb.jpg" width="70%" alt="HOG" /><br><i> Representação gráfica dos histogramas de gradientes orientados da imagem
+de um rosto, calculados com 9 intervalos em blocos de tamanho 8 por 8.</i></p>
 
 ### Classificação
 
 As Máquinas de Vetores de Suporte – do inglês, SVM, ou _Support Vector Machines_ – são classificadores lineares binários que podem ser empregados na tarefa de identificar objetos em imagens previamente descritas por HOGs. Classificadores SVM, munidos de dados para treino, calculam hiperplanos separadores para as duas classes, de modo a maximizar a distância entre os planos e as amostras. Uma vez obtidos os hiperplanos, a predição de classe para uma amostra inédita é feita de forma extremamente eficaz, pois basta determinar a qual subespaço a amostra pertence, _i.e._, de qual lado do hiperplano ela está.
 
-<figure><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/svm_2.jpg" width="50%" alt=" Representação do hiperplano separador de duas classes calculado por um SVM." /><figcaption> Representação do hiperplano separador de duas classes calculado por um SVM.</figcaption></figure>
+<p align="center"><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/svm_2.jpg" width="50%" alt=" Representação do hiperplano separador de duas classes calculado por um SVM." /><br><i> Representação do hiperplano separador de duas classes calculado por um SVM.</i></p>
 
 ## Metodologia
 
@@ -222,7 +224,7 @@ As Máquinas de Vetores de Suporte – do inglês, SVM, ou _Support Vector Machi
 
 A fim de treinar o algoritmo classificador adotado, um conjunto de amostras positivas, isto é, de imagens que contém faces, e negativas, sem faces, foi preparado. As amostras positivas foram extraídas da base de dados Caltech Web Faces.
 
-<figure><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/positive_comb.jpg" width="80%" alt="Exemplares de amostras positivas e negativas da base de dados." /><figcaption> Exemplares de amostras positivas e negativas da base de dados.</figcaption></figure>
+<p align="center"><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/positive_comb.jpg" width="80%" alt="Exemplares de amostras positivas e negativas da base de dados." /><br><i> Exemplares de amostras positivas e negativas da base de dados.</i></p>
 
 ### Cálculo dos gradientes e histogramas
 
@@ -230,7 +232,7 @@ As máscaras correspondentes aos filtros de Prewitt e Sobel foram definidas no s
 
 Para a construção dos histogramas, cada imagem foi dividida em 64 blocos de tamanho ![](https://latex.codecogs.com/png.latex?4%20%5Ctimes%204), sobre os quais histogramas de 8 setores foram calculados e distribuídos ao longo da terceira dimensão. Em seguida, a matriz resultante, de dimensões ![](https://latex.codecogs.com/png.latex?8%20%5Ctimes%208%20%5Ctimes%208), foi comprimida em um vetor com 512 características para treino do classificador. Na figura abaixo, encontra-se uma síntese desse processo.
 
-<figure><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/histimg.jpg" width="80%" alt="Vetores." /><figcaption> Processo de construção dos vetores de descritores a partir dos histogramas dos gradientes de uma imagem filtrada com filtros diferenciadores.</figcaption></figure>
+<p align="center"><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/histimg.jpg" width="80%" alt="Vetores." /><br><i> Processo de construção dos vetores de descritores a partir dos histogramas dos gradientes de uma imagem filtrada com filtros diferenciadores.</i></p>
 
 ### Treino do classificador e testes de desempenho
 
@@ -242,20 +244,20 @@ Para reduzir a incidência de falsas detecções, as amostras foram tomadas numa
 
 A fim de visualizar o resultado da convolução dos filtros de Prewitt e Sobel sobre as imagens, a magnitude e o ângulo dos vetores calculados foram normalizadas e exibidas na forma matricial. É possível verificar que ambos os filtros apresentam resultados similares, com forte resposta na região das bordas dos objetos. De fato, contornos são regiões com brusca variação de intensidade nos tons de cinza da imagem, o que explica a saída observada para os filtros diferenciadores. Embora seja capaz de filtrar ruídos de alta frequência melhor que o filtro de Prewitt, o resultado da aplicação do operador de Sobel não apresentou diferenças significativas em relação ao primeiro. Isso se deve, principalmente, à redução na resolução das amostras, processo que atenua significativamente a presença de ruído.
 
-<figure><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/resultados_filtros.jpg" width="80%" alt="Resultado para as magnitudes dos vetores gradientes calculados com os
-filtros de Sobel e Prewitt." /><figcaption> Resultado para as magnitudes dos vetores gradientes calculados com os
-filtros de Sobel e Prewitt.</figcaption></figure>
+<p align="center"><img src="https://s3.amazonaws.com/abnersn/github/hog-detector/resultados_filtros.jpg" width="80%" alt="Resultado para as magnitudes dos vetores gradientes calculados com os
+filtros de Sobel e Prewitt." /><br><i> Resultado para as magnitudes dos vetores gradientes calculados com os
+filtros de Sobel e Prewitt.</i></p>
 
 ### Resultados nas bases de teste
 
 A fim de verificar a robustez da metodologia quanto à capacidade de detectar a presença de faces em novos blocos, foram efetuados testes com 30% das imagens, cujos resultados estão expostos na tabela a seguir. Ambos os filtros obtiveram desempenho similar, com baixas taxas de erro. O índice de falsos positivos nulo deve-se ao favorecimento das amostras negativas em detrimento das positivas, que tende limitar significativamente a região N-dimensional para a qual o classificador sinaliza uma detecção.
 
-<figure>
-<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/res.jpg" width="80%" alt="Resultados obtidos pela janela deslizante de detecção." />
-<figcaption>
+<p align="center">
+<img src="https://s3.amazonaws.com/abnersn/github/hog-detector/res.jpg" width="80%" alt="Resultados obtidos pela janela deslizante de detecção." /><br>
+<i>
 Resultados obtidos pela janela deslizante de detecção.
-</figcaption>
-</figure>
+</i>
+</p>
 
 <table><caption>Resultados obtidos por classificadores treinados com descritores de ambos os filtros.</caption><thead><tr class="header"><th style="text-align: center;">Filtro utilizado</th><th style="text-align: center;">Erro global</th><th style="text-align: center;">Falsos-positivos</th><th style="text-align: center;">Falsos-negativos</th></tr></thead><tbody><tr class="odd"><td style="text-align: center;">Prewitt</td><td style="text-align: center;">0,53%</td><td style="text-align: center;">0%</td><td style="text-align: center;">0,53%</td></tr><tr class="even"><td style="text-align: center;">Sobel</td><td style="text-align: center;">0,47%</td><td style="text-align: center;">0%</td><td style="text-align: center;">0,47%</td></tr></tbody></table>
 
