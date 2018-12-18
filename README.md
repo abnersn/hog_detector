@@ -2,6 +2,8 @@
 ![GitHub release](https://img.shields.io/github/release/abnersn/hog_detector.svg?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/abnersn/hog_detector.svg?style=flat-square)
 
+Implementação em MATLAB de um detector facial baseado em histogramas de gradientes orientados para extração de características e máquinas de vetores de suporte (SVM) para classificação.
+
 ## Requisitos
 Os softwares abaixo (ou versões compatíveis) são necessários para executar os scripts.
 * [MATLAB r2017a](https://www.mathworks.com/products/matlab.html);
