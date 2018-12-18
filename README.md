@@ -1,4 +1,6 @@
 # Detecção de Faces com Histogramas de Gradientes Orientados
+![GitHub release](https://img.shields.io/github/release/abnersn/hog_detector.svg?style=flat-square)
+![GitHub](https://img.shields.io/github/license/abnersn/hog_detector.svg?style=flat-square)
 
 ## Requisitos
 Os softwares abaixo (ou versões compatíveis) são necessários para executar os scripts.
