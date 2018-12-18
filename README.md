@@ -28,9 +28,6 @@ Para treino do classificador SVM, são necessárias amostras de imagens com tama
 ```
 A pasta `data` contém amostras já preparadas, com 200 exemplares positivos e 20 mil negativos. Uma vez organizados os dados para treino, basta executar o script `train.m`, especificando os parâmetros de treino desejados. O script deve produzir um arquivo `svm_model_sobel.mat` ou `svm_model_prewitt.mat`, conforme o filtro escolhido. Os arquivos `.mat` contém os modelos SVM usados para executar a detecção.
 
-**Autor:**
-Abner Sousa Nascimento
-
 # Documentação
 
 - [Introdução](#introdução-e-justificativa)
@@ -294,3 +291,7 @@ Sobel, Irwin. 1968. “An Isotropic 3x3 Image Gradient Operator.” _Presentatio
 Stan Z. Li, Anil K. Jain. 2011. _Handbook of Face Recognition_. 2nd ed. Springer-Verlag London.
 
 Woods, J.W. 2011. _Multidimensional Signal, Image, and Video Processing and Coding_. Elsevier Science. <https://books.google.com.br/books?id=0lJ0atc5X-UC>.
+
+## Autor
+* Abner Nascimento - [Universidade Federal do Ceará](http://www.ec.ufc.br/).
+
